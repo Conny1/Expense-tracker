@@ -1,0 +1,21 @@
+-- Create the users table for storing user information
+CREATE TABLE expensemanager.users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Create the business_names table with only business_id and business_name
+CREATE TABLE expensemanager.business_names (
+    business_id INT AUTO_INCREMENT PRIMARY KEY,
+    business_name VARCHAR(255) NOT NULL
+);
+
+-- Create the income_expense table with only business_id, income, expense, and date
+CREATE TABLE expensemanager.income_expense (
+    business_id INT NOT NULL,
+    income DECIMAL(10, 2) NOT NULL,
+    expense DECIMAL(10, 2) NOT NULL,
+    transaction_date DATE NOT NULL,
+    FOREIGN KEY (business_id) REFERENCES expensemanager.business_names(business_id)
+);
