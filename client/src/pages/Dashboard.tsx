@@ -1,6 +1,7 @@
 import Addbusiness from "../components/Addbusiness";
-import Amount from "../components/Amount";
+
 import BusinessInput from "../components/BusinessInput";
+import BusinessTable from "../components/BusinessTable";
 import Nav from "../components/Nav";
 import { styled } from "styled-components";
 const Container = styled.div`
@@ -29,11 +30,8 @@ const BodyContainer = styled.div`
   display: flex;
   gap: 10px;
 `;
-const Values = styled.div``;
-const ProfitLoss = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+const Values = styled.div`
+  flex: 1;
 `;
 
 const Dashboard = () => {
@@ -45,20 +43,8 @@ const Dashboard = () => {
       <BodyContainer>
         <BusinessInput />
         <Values>
-          <h3>Profits made </h3>
-          <ProfitLoss>
-            <Amount />
-            <Amount />
-            <Amount />
-            <Amount />
-          </ProfitLoss>
-          <h3>Loss incured </h3>
-          <ProfitLoss>
-            <Amount />
-            <Amount />
-            <Amount />
-            <Amount />
-          </ProfitLoss>
+          <h3>Profits $ loss </h3>
+          <BusinessTable />
         </Values>
       </BodyContainer>
     </Container>

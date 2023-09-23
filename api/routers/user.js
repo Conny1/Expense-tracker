@@ -4,6 +4,7 @@ import {
   addIncomeandExpense,
   getAmountBasedMonth,
   getAmountBasedOnDay,
+  getAmountBasedWeek,
   getallAmountByBusinessID,
   getallBusiness,
 } from "../controllers/user.js";
@@ -22,5 +23,8 @@ router.get("/get/currentdateamount/:id", getAmountBasedOnDay);
 
 // get databased on currentDate
 router.get("/get/month/:id", getAmountBasedMonth);
+
+// get databased on currentDate
+router.get("/get/week/:id", getAmountBasedWeek);
 
 export default router;

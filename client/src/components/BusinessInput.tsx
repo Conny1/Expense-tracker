@@ -1,21 +1,12 @@
 import styled from "styled-components";
-// import React, { useState } from "react";
-
-import Select from "react-select";
-
-const colourOptions = [
-  { value: "ocean", label: "Ocean" },
-  { value: "blue", label: "Blue" },
-  { value: "purple", label: "Purple" },
-  { value: "red", label: "Red" },
-  { value: "orange", label: "Orange" },
-  { value: "yellow", label: "Yellow" },
-  { value: "green", label: "Green" },
-  { value: "forest", label: "Forest" },
-  { value: "slate", label: "Slate" },
-  { value: "silver", label: "Silver" },
-];
-
+import Select, { SingleValue } from "react-select";
+import { useEffect, useState } from "react";
+import {
+  useAddBusinessExpenseMutation,
+  useGetBusinessQuery,
+} from "./utils/reduxtollkitquery";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Container = styled.div`
   outline: 1px solid gainsboro;
   padding: 5px;
@@ -50,25 +41,130 @@ const Btn = styled.button`
   align-self: center;
 `;
 
+type BusinessOptions = {
+  value: string | number | undefined;
+  label: string;
+};
+
 const BusinessInput = () => {
+  const [income, setincome] = useState("");
+  const [expense, setexpense] = useState("");
+  const [date, setdate] = useState("");
+  const [business, setbusiness] = useState<BusinessOptions>({
+    value: "",
+    label: "",
+  });
+  const [options, setoptions] = useState<BusinessOptions[]>([
+    {
+      value: "",
+      label: "",
+    },
+  ]);
+
+  // submit expenses and income mutation
+  const [
+    AddBusinessExpense,
+    {
+      isLoading: expenseLoading,
+      isSuccess: expenseSubmited,
+      error: expenseError,
+    },
+  ] = useAddBusinessExpenseMutation();
+
+  // get the busineses foselect option
+  const { data } = useGetBusinessQuery();
+
+  // map data into options and labels
+  useEffect(() => {
+    const makeOptions = () => {
+      const vals = data?.map((item) => {
+        return { label: item.business_name, value: item.business_id };
+      });
+
+      if (vals) {
+        setoptions(vals);
+      }
+    };
+
+    makeOptions();
+  }, [data]);
+  // confirm if any data is submited sucessfuly
+
+  useEffect(() => {
+    if (expenseLoading) {
+      toast("submiting..");
+    }
+    if (expenseSubmited) {
+      toast("Data added sucessfuly");
+    }
+    if (expenseError) {
+      toast("Error, Try again");
+    }
+  }, [expenseLoading, expenseSubmited, expenseError]);
+
+  const selectBusiness = (options: SingleValue<BusinessOptions>) => {
+    if (options?.label && options?.value) {
+      setbusiness(options);
+    }
+  };
+
+  const addSendtoDb = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const body = {
+      business_id: business.value,
+      income: Number(income),
+      expense: Number(expense),
+      date,
+    };
+    await AddBusinessExpense(body);
+  };
+
   return (
     <Container>
+      <ToastContainer />
       <h3>Enter income and Expenses</h3>
-      <Form>
+      <Form onSubmit={addSendtoDb}>
         <Item>
           <Select
             className="basic-single"
             classNamePrefix="select"
             name="business"
-            options={colourOptions}
+            options={options}
+            onChange={selectBusiness}
           />
         </Item>
         <Item>
-          <Input type="number" placeholder="Income" required />
+          <Input
+            onChange={(e) => {
+              setincome(e.target.value);
+            }}
+            type="number"
+            placeholder="Income"
+            required
+          />
         </Item>
 
         <Item>
-          <Input type="number" placeholder="Expense" required />
+          <Input
+            onChange={(e) => {
+              setexpense(e.target.value);
+            }}
+            type="number"
+            placeholder="Expense"
+            required
+          />
+        </Item>
+
+        <Item>
+          <Input
+            onChange={(e) => {
+              setdate(e.target.value);
+            }}
+            type="date"
+            placeholder="Input Date"
+            required
+          />
         </Item>
 
         <Btn type="submit"> Add</Btn>

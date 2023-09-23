@@ -147,3 +147,26 @@ export const getAmountBasedMonth = (req, resp, next) => {
     }
   });
 };
+
+// getData by week
+export const getAmountBasedWeek = (req, resp, next) => {
+  const business_id = Number(req.params.id);
+  const query =
+    "SELECT  YEAR(transaction_date) AS year,  MONTH(transaction_date) AS month, FLOOR((DAY(transaction_date) - 1) / 7) + 1 AS week_in_month, transaction_date, business_id,  SUM(income) AS total_income,  SUM(expense) AS total_expense FROM    expensemanager.income_expense WHERE  YEAR(transaction_date) = YEAR(CURDATE()) AND business_id =? GROUP BY  year, month, week_in_month, transaction_date ORDER BY   year, month, week_in_month";
+
+  connection.query(query, [business_id], (err, results) => {
+    if (err) {
+      return next(createError(500, "Database error"));
+    } else {
+      if (results.length === 0) {
+        return resp.status(200).json({
+          success: true,
+          status: 404,
+          message: "Data not found.",
+        });
+      }
+      //   console.log(results);
+      return resp.status(200).json(results);
+    }
+  });
+};
