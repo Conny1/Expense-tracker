@@ -55,7 +55,7 @@ export const addIncomeandExpense = (req, resp, next) => {
     business_id: req.body.business_id,
     income: req.body.income,
     expense: req.body.expense,
-    transaction_date: req.body.date,
+    transaction_date: req.body.transaction_date,
   };
 
   // Insert data into the income_expense table
@@ -80,7 +80,7 @@ export const addIncomeandExpense = (req, resp, next) => {
 export const getallAmountByBusinessID = (req, resp, next) => {
   const business_id = Number(req.params.id);
   const query =
-    "SELECT * FROM expensemanager.income_expense WHERE business_id=? ";
+    "SELECT * FROM expensemanager.income_expense WHERE business_id=? ORDER BY transaction_date DESC ";
 
   connection.query(query, [business_id], (err, results) => {
     if (err) {

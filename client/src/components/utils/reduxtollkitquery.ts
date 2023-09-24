@@ -26,6 +26,13 @@ export const api = createApi({
         body,
       }),
     }),
+
+    dailyExpenseIncome: builder.mutation<BusinessAmount[], string | number>({
+      query: (id) => ({
+        url: `/user/get/amount/${id}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -35,4 +42,5 @@ export const {
   useGetBusinessQuery,
   useAddBusinessExpenseMutation,
   useAddBusinessMutation,
+  useDailyExpenseIncomeMutation,
 } = api;

@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import Select, { SingleValue } from "react-select";
 import { useEffect, useState } from "react";
-import {
-  useAddBusinessExpenseMutation,
-  useGetBusinessQuery,
-} from "./utils/reduxtollkitquery";
+import { useAddBusinessExpenseMutation } from "./utils/reduxtollkitquery";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BusinessOptions } from "../pages/Dashboard";
 const Container = styled.div`
   outline: 1px solid gainsboro;
   padding: 5px;
@@ -41,12 +39,11 @@ const Btn = styled.button`
   align-self: center;
 `;
 
-type BusinessOptions = {
-  value: string | number | undefined;
-  label: string;
+type Props = {
+  options: BusinessOptions[];
 };
 
-const BusinessInput = () => {
+const BusinessInput = ({ options }: Props) => {
   const [income, setincome] = useState("");
   const [expense, setexpense] = useState("");
   const [date, setdate] = useState("");
@@ -54,12 +51,6 @@ const BusinessInput = () => {
     value: "",
     label: "",
   });
-  const [options, setoptions] = useState<BusinessOptions[]>([
-    {
-      value: "",
-      label: "",
-    },
-  ]);
 
   // submit expenses and income mutation
   const [
@@ -70,25 +61,6 @@ const BusinessInput = () => {
       error: expenseError,
     },
   ] = useAddBusinessExpenseMutation();
-
-  // get the busineses foselect option
-  const { data } = useGetBusinessQuery();
-
-  // map data into options and labels
-  useEffect(() => {
-    const makeOptions = () => {
-      const vals = data?.map((item) => {
-        return { label: item.business_name, value: item.business_id };
-      });
-
-      if (vals) {
-        setoptions(vals);
-      }
-    };
-
-    makeOptions();
-  }, [data]);
-  // confirm if any data is submited sucessfuly
 
   useEffect(() => {
     if (expenseLoading) {
@@ -115,7 +87,7 @@ const BusinessInput = () => {
       business_id: business.value,
       income: Number(income),
       expense: Number(expense),
-      date,
+      transaction_date: date,
     };
     await AddBusinessExpense(body);
   };
