@@ -9,7 +9,11 @@ import { useEffect, useState } from "react";
 import {
   useDailyExpenseIncomeMutation,
   useGetBusinessQuery,
+  useMonthlyExpenseIncomeMutation,
+  useWeeklyExpenseIncomeMutation,
 } from "../components/utils/reduxtollkitquery";
+import Monthly from "../components/Monthly";
+import Weekly from "../components/Weekly";
 const Container = styled.div`
   outline: 1px solid yellow;
   width: 100%;
@@ -45,6 +49,16 @@ const Item = styled.div`
   width: 100%;
 `;
 
+const Analysis = styled.div`
+  margin-top: 30px;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 10px;
+`;
+
 export type BusinessOptions = {
   value: string | number | undefined;
   label: string;
@@ -69,11 +83,24 @@ const Dashboard = () => {
     },
   ] = useDailyExpenseIncomeMutation();
 
+  // RTQ mutation fro geting monthly data based on business_id
+  const [
+    MonthlyExpenseIncome,
+    { data: monthlyData, isLoading: isMonthlyloading, error: monthlyError },
+  ] = useMonthlyExpenseIncomeMutation();
+
+  // RTQ mutation fro geting weekly data based on business_id
+  const [
+    weeklyExpenseIncome,
+    { data: weeklyData, isLoading: isweeklyloading, error: weeklyError },
+  ] = useWeeklyExpenseIncomeMutation();
+
   // select box
   const selectBusiness = (options: SingleValue<BusinessOptions>) => {
     if (options?.label && options?.value) {
-      dailyExpenseIncome(options.value);
-      console.log(options?.value);
+      dailyExpenseIncome(options?.value);
+      MonthlyExpenseIncome(options?.value);
+      weeklyExpenseIncome(options?.value);
     }
   };
 
@@ -119,6 +146,19 @@ const Dashboard = () => {
           />
         </Values>
       </BodyContainer>
+
+      <Analysis>
+        <Monthly
+          monthlyData={monthlyData}
+          isMonthlyloading={isMonthlyloading}
+          monthlyError={monthlyError}
+        />
+        <Weekly
+          weeklyData={weeklyData}
+          isweeklyloading={isweeklyloading}
+          weeklyError={weeklyError}
+        />
+      </Analysis>
     </Container>
   );
 };

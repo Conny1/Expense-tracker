@@ -1,6 +1,6 @@
 // Need to use the React-specific entry point to allow generating React hooks
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Business, BusinessAmount } from "./types";
+import { Business, BusinessAmount, getBusinessData } from "./types";
 
 // Define a service using a base URL and expected endpoints
 export const api = createApi({
@@ -33,6 +33,20 @@ export const api = createApi({
         method: "POST",
       }),
     }),
+
+    weeklyExpenseIncome: builder.mutation<getBusinessData[], string | number>({
+      query: (id) => ({
+        url: `/user/get/week/${id}`,
+        method: "POST",
+      }),
+    }),
+
+    MonthlyExpenseIncome: builder.mutation<getBusinessData[], string | number>({
+      query: (id) => ({
+        url: `/user/get/month/${id}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -43,4 +57,6 @@ export const {
   useAddBusinessExpenseMutation,
   useAddBusinessMutation,
   useDailyExpenseIncomeMutation,
+  useWeeklyExpenseIncomeMutation,
+  useMonthlyExpenseIncomeMutation,
 } = api;

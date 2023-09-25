@@ -22,9 +22,9 @@ router.post("/get/amount/:id", getallAmountByBusinessID);
 router.get("/get/currentdateamount/:id", getAmountBasedOnDay);
 
 // get databased on currentDate
-router.get("/get/month/:id", getAmountBasedMonth);
+router.post("/get/month/:id", getAmountBasedMonth);
 
 // get databased on currentDate
-router.get("/get/week/:id", getAmountBasedWeek);
+router.post("/get/week/:id", getAmountBasedWeek);
 
 export default router;
