@@ -5,17 +5,19 @@ import { useAddBusinessExpenseMutation } from "./utils/reduxtollkitquery";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BusinessOptions } from "../pages/Dashboard";
+import { mobile } from "./utils/Responsive";
 const Container = styled.div`
   outline: 1px solid gainsboro;
   padding: 5px;
   width: 50%;
-
+  /* outline: 1px solid red; */
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   margin-top: 30px;
+  ${mobile({ width: "auto", flex: 1 })};
 `;
 const Form = styled.form`
   /* flex: 1; */
@@ -83,6 +85,9 @@ const BusinessInput = ({ options }: Props) => {
   const addSendtoDb = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!business.value || !income || !expense || !date) {
+      return toast("Input all requred infromation");
+    }
     const body = {
       business_id: business.value,
       income: Number(income),

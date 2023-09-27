@@ -25,7 +25,7 @@ const Nav = () => {
     <Container>
       <NavBar>
         <Link to="/">Dashboard</Link>
-        <Link to="/analysis">Analysis</Link>
+
         <Link to="/profile">Profile</Link>
         <Btn>Logout</Btn>
       </NavBar>

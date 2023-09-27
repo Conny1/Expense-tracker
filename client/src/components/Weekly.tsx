@@ -4,6 +4,7 @@ import { getBusinessData } from "./utils/types";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import { useMemo } from "react";
+import { mobile } from "./utils/Responsive";
 
 const columns = [
   {
@@ -55,6 +56,7 @@ const columns = [
 const Container = styled.div`
   max-height: 70vh;
   overflow: scroll;
+  ${mobile({ width: "100%" })};
 `;
 
 type Props = {
@@ -122,7 +124,7 @@ const Weekly = ({ weeklyError, isweeklyloading, weeklyData }: Props) => {
   return (
     <Container>
       <h4>Weekly</h4>
-      <Table columns={columns} data={Data} />{" "}
+      <Table className="table" columns={columns} data={Data} />{" "}
     </Container>
   );
 };

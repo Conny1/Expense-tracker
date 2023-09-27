@@ -78,3 +78,9 @@ button:focus-visible {
 ::-webkit-scrollbar-track:hover {
   background-color: #2a2b2f;
 }
+
+@media screen and (min-width: 950px) {
+  .table {
+    width: 100%;
+  }
+}

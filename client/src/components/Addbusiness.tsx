@@ -25,24 +25,28 @@ const Addbusiness = () => {
 
   // add business mutation
 
-  const [AddBusiness, { isLoading, isSuccess }] = useAddBusinessMutation();
+  const [AddBusiness, { isLoading, isSuccess, error }] =
+    useAddBusinessMutation();
 
   const submitBusiness = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (name) {
+    if (name !== "") {
       await AddBusiness({ business_name: name });
     }
   };
 
   useEffect(() => {
+    if (error) {
+      toast("Error.Try again!!");
+    }
     if (isLoading) {
       toast("submiting..");
     }
     if (isSuccess) {
       toast("Data added sucessfuly");
     }
-  }, [isLoading, isSuccess]);
+  }, [isLoading, isSuccess, error]);
   return (
     <Container>
       <ToastContainer />
@@ -51,6 +55,7 @@ const Addbusiness = () => {
           onChange={(e) => setname(e.target.value)}
           type="text"
           placeholder="Enter Business Name"
+          required
         />
         <button type="submit"> Add</button>
       </Form>

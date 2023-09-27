@@ -4,51 +4,55 @@ import { getBusinessData } from "./utils/types";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import { useMemo } from "react";
+import { mobile } from "./utils/Responsive";
 
 const columns = [
   {
     title: "Year",
     dataIndex: "year",
     key: "year",
-    width: 50,
+    // width: 50,
   },
   {
     title: "Month",
     dataIndex: "month",
     key: "month",
-    width: 50,
+    // width: 50,
   },
   {
     title: "TotalExpense",
     dataIndex: "totalExpense",
     key: "totalExpense",
-    width: 100,
+    // width: 100,
   },
   {
     title: "TotalIncome",
     dataIndex: "totalIncome",
     key: "totalIncome",
-    with: 150,
+    // with: 150,
   },
 
   {
     title: "TotalProfit",
     dataIndex: "totalProfit",
     key: "totalProfit",
-    with: 200,
+    // with: 200,
   },
 
   {
     title: "TotalLoss",
     dataIndex: "totalLoss",
     key: "totalLoss",
-    with: 200,
+    // with: 200,
   },
 ];
 
 const Container = styled.div`
   max-height: 70vh;
   overflow: scroll;
+  ${mobile({ width: "100%" })};
+  display: flex;
+  flex-direction: column;
 `;
 
 type Props = {
@@ -115,7 +119,7 @@ const Monthly = ({ monthlyError, isMonthlyloading, monthlyData }: Props) => {
   return (
     <Container>
       <h4>Monthly</h4>
-      <Table columns={columns} data={Data} />{" "}
+      <Table className="table" columns={columns} data={Data} />{" "}
     </Container>
   );
 };

@@ -14,6 +14,8 @@ import {
 } from "../components/utils/reduxtollkitquery";
 import Monthly from "../components/Monthly";
 import Weekly from "../components/Weekly";
+import Linechart from "../components/Linechart";
+import { mobile } from "../components/utils/Responsive";
 const Container = styled.div`
   outline: 1px solid yellow;
   width: 100%;
@@ -39,6 +41,7 @@ const BodyContainer = styled.div`
   width: 90%;
   display: flex;
   gap: 10px;
+  ${mobile({ flexDirection: "column" })};
 `;
 const Values = styled.div`
   flex: 1;
@@ -47,6 +50,7 @@ const Values = styled.div`
 `;
 const Item = styled.div`
   width: 100%;
+  ${mobile({ minHeight: "150px" })};
 `;
 
 const Analysis = styled.div`
@@ -55,8 +59,20 @@ const Analysis = styled.div`
   width: 90%;
   justify-content: space-between;
   align-items: center;
-
   gap: 10px;
+  ${mobile({ flexDirection: "column" })};
+`;
+
+const Charts = styled.div`
+  margin-top: 30px;
+  flex: 1;
+  height: 400px;
+  outline: 1px solid red;
+  ${mobile({ width: "100%", flex: "none" })};
+`;
+
+const TableGroup = styled.div`
+  width: 100%;
 `;
 
 export type BusinessOptions = {
@@ -148,16 +164,26 @@ const Dashboard = () => {
       </BodyContainer>
 
       <Analysis>
-        <Monthly
-          monthlyData={monthlyData}
-          isMonthlyloading={isMonthlyloading}
-          monthlyError={monthlyError}
-        />
-        <Weekly
-          weeklyData={weeklyData}
-          isweeklyloading={isweeklyloading}
-          weeklyError={weeklyError}
-        />
+        <Charts>
+          <h3>Visualization of total mothly loss and profits per year</h3>
+          <Linechart
+            monthlyData={monthlyData}
+            isMonthlyloading={isMonthlyloading}
+            monthlyError={monthlyError}
+          />
+        </Charts>
+        <TableGroup>
+          <Monthly
+            monthlyData={monthlyData}
+            isMonthlyloading={isMonthlyloading}
+            monthlyError={monthlyError}
+          />
+          <Weekly
+            weeklyData={weeklyData}
+            isweeklyloading={isweeklyloading}
+            weeklyError={weeklyError}
+          />
+        </TableGroup>
       </Analysis>
     </Container>
   );
