@@ -19,3 +19,9 @@ export type getBusinessData = {
   total_income: number;
   total_expense: number;
 };
+
+export type User = {
+  email: string;
+  password?: string;
+  token?: string;
+};

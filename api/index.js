@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import UserRouter from "./routers/user.js";
-import { connection } from "./utils/db.js";
+import authRouter from "./routers/auth.js";
 dotenv.config();
 // import "./utils/db.js";
 
@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/user", UserRouter);
+app.use("/auth", authRouter);
 
 const PORT = process.env.PRT || 5000;
 

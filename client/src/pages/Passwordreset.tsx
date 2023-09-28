@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { useLoginAccountMutation } from "../components/utils/reduxtollkitquery";
+import "react-toastify/dist/ReactToastify.css";
+import { useChangePasswordMutation } from "../components/utils/reduxtollkitquery";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -39,73 +40,71 @@ const Btn = styled.button`
   align-self: center;
 `;
 
-const Login = () => {
+const Passwordreset = () => {
+  const [newpassword, setnewpassword] = useState("");
   const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const navigation = useNavigate();
 
-  const [loginAccount, { data, isLoading, isSuccess, error }] =
-    useLoginAccountMutation();
+  const navigate = useNavigate();
 
-  const login = (e: React.FormEvent<HTMLFormElement>) => {
+  const [changePassword, { isSuccess, isLoading, error }] =
+    useChangePasswordMutation();
+  const send = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (email === "" || password === "") {
-      return toast("Enter all valid credentials.");
-    }
-    loginAccount({ email, password });
+    if (email === "" || newpassword === "")
+      return toast("Enter required credentials");
+    changePassword({
+      email,
+      password: newpassword,
+    });
   };
 
   useEffect(() => {
-    if (isLoading) toast("Loading...");
+    if (isLoading) toast("loading...");
     if (isSuccess) {
-      toast("Login sucessful");
-      localStorage.setItem("user", JSON.stringify(data));
-      navigation("/");
+      toast("success. Redirecting to LoginPage");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     }
     if (error) {
       if ("status" in error) {
-        if (error.status === 404) {
-          toast("account with that email does not exist");
-        }
-
         if (error.status === 401) {
-          toast("Invalid email or password");
+          toast("Invalid Email");
         }
 
         if (error.status === 500) {
-          toast("network Error. Try again");
+          toast("network error try gain");
         }
       }
     }
-  }, [isLoading, isSuccess, navigation, data, error]);
+  }, [isLoading, error, isSuccess, navigate]);
 
   return (
     <Container>
       <ToastContainer />
       <h3>Enter the required credentials</h3>
-      <Form onSubmit={login}>
+      <Form onSubmit={send}>
         <Item>
           <Input
             onChange={(e) => setemail(e.target.value)}
             type="email"
-            placeholder="Email"
+            placeholder="email"
             required
           />
         </Item>
         <Item>
           <Input
-            onChange={(e) => setpassword(e.target.value)}
-            type="Password"
-            placeholder="Password"
+            onChange={(e) => setnewpassword(e.target.value)}
+            type="text"
+            placeholder="newpassword"
             required
           />
         </Item>
 
-        <Btn type="submit"> Login</Btn>
-        <Link to="/forgot">Forgot password ?</Link>
+        <Btn type="submit"> Reset</Btn>
       </Form>
     </Container>
   );
 };
 
-export default Login;
+export default Passwordreset;

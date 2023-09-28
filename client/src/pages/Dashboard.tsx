@@ -67,12 +67,11 @@ const Charts = styled.div`
   margin-top: 30px;
   flex: 1;
   height: 400px;
-  outline: 1px solid red;
   ${mobile({ width: "100%", flex: "none" })};
 `;
 
 const TableGroup = styled.div`
-  width: 100%;
+  flex: 1;
 `;
 
 export type BusinessOptions = {
