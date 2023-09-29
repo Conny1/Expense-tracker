@@ -5,10 +5,29 @@ import { Business, BusinessAmount, User, getBusinessData } from "./types";
 // Define a service using a base URL and expected endpoints
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_BASE_URL,
+
+    prepareHeaders: (headers) => {
+      // const token = (getState() as RootState).AuthSlice.authDetails?.tokens;
+      const authDet = localStorage.getItem("user");
+
+      if (authDet) {
+        const token = JSON.parse(authDet).token;
+
+        // If we have a token set in state, let's assume that we should be passing it.
+        if (token) {
+          headers.set("authorization", `Bearer ${token}`);
+        }
+      }
+      return headers;
+    },
+  }),
+  tagTypes: ["Businessnames", "Incomeexpense", "Daily"],
   endpoints: (builder) => ({
     getBusiness: builder.query<Business[], void>({
       query: () => `/user/get/business/`,
+      providesTags: ["Businessnames"],
     }),
 
     AddBusinessExpense: builder.mutation<void, BusinessAmount>({
@@ -17,6 +36,7 @@ export const api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Incomeexpense"],
     }),
 
     AddBusiness: builder.mutation<void, Business>({
@@ -25,27 +45,22 @@ export const api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Businessnames"],
     }),
 
-    dailyExpenseIncome: builder.mutation<BusinessAmount[], string | number>({
-      query: (id) => ({
-        url: `/user/get/amount/${id}`,
-        method: "POST",
-      }),
+    dailyExpenseIncome: builder.query<BusinessAmount[], string | number>({
+      query: (id) => `/user/get/amount/${id}`,
+      providesTags: ["Incomeexpense"],
     }),
 
-    weeklyExpenseIncome: builder.mutation<getBusinessData[], string | number>({
-      query: (id) => ({
-        url: `/user/get/week/${id}`,
-        method: "POST",
-      }),
+    weeklyExpenseIncome: builder.query<getBusinessData[], string | number>({
+      query: (id) => `/user/get/week/${id}`,
+      providesTags: ["Incomeexpense"],
     }),
 
-    MonthlyExpenseIncome: builder.mutation<getBusinessData[], string | number>({
-      query: (id) => ({
-        url: `/user/get/month/${id}`,
-        method: "POST",
-      }),
+    MonthlyExpenseIncome: builder.query<getBusinessData[], string | number>({
+      query: (id) => `/user/get/month/${id}`,
+      providesTags: ["Incomeexpense"],
     }),
 
     loginAccount: builder.mutation<User, User>({
@@ -80,9 +95,9 @@ export const {
   useGetBusinessQuery,
   useAddBusinessExpenseMutation,
   useAddBusinessMutation,
-  useDailyExpenseIncomeMutation,
-  useWeeklyExpenseIncomeMutation,
-  useMonthlyExpenseIncomeMutation,
+  useDailyExpenseIncomeQuery,
+  useWeeklyExpenseIncomeQuery,
+  useMonthlyExpenseIncomeQuery,
   useLoginAccountMutation,
   useChangePasswordMutation,
   useVerifyemailMutation,

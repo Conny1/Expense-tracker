@@ -9,17 +9,18 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
-import { SerializedError } from "@reduxjs/toolkit";
-import { getBusinessData } from "./utils/types";
+import { useMonthlyExpenseIncomeQuery } from "./utils/reduxtollkitquery";
 
 type Props = {
-  monthlyError: FetchBaseQueryError | SerializedError | undefined;
-  isMonthlyloading: boolean;
-  monthlyData?: getBusinessData[];
+  businessID: string | number;
 };
 
-const Linechart = ({ monthlyError, isMonthlyloading, monthlyData }: Props) => {
+const Linechart = ({ businessID }: Props) => {
+  const {
+    data: monthlyData,
+    isLoading: isMonthlyloading,
+    error: monthlyError,
+  } = useMonthlyExpenseIncomeQuery(businessID);
   const months = useMemo(
     () => [
       "jan",
@@ -56,8 +57,6 @@ const Linechart = ({ monthlyError, isMonthlyloading, monthlyData }: Props) => {
 
     return vals;
   }, [monthlyData, months]);
-
-  console.log(constcalculatedData);
 
   if (isMonthlyloading) {
     return <>Loading...</>;

@@ -1,7 +1,5 @@
 import { styled } from "styled-components";
-import { BusinessAmount } from "./utils/types";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
-import { SerializedError } from "@reduxjs/toolkit";
+import { useDailyExpenseIncomeQuery } from "./utils/reduxtollkitquery";
 
 const Container = styled.table`
   width: 100%;
@@ -19,16 +17,16 @@ const Tabledata = styled.td`
 `;
 
 type Props = {
-  incomeExpensedata?: BusinessAmount[];
-  incomeExpenseLoading: boolean;
-  expenseincomeError: FetchBaseQueryError | SerializedError | undefined;
+  businessID: string | number;
 };
 
-const BusinessTable = ({
-  incomeExpensedata,
-  incomeExpenseLoading,
-  expenseincomeError,
-}: Props) => {
+const BusinessTable = ({ businessID }: Props) => {
+  const {
+    data: incomeExpensedata,
+    isLoading: incomeExpenseLoading,
+    error: expenseincomeError,
+  } = useDailyExpenseIncomeQuery(businessID);
+
   if (incomeExpenseLoading) {
     return <>Loading...</>;
   }

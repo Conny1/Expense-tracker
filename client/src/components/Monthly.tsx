@@ -1,10 +1,8 @@
 import { styled } from "styled-components";
 import Table from "rc-table";
-import { getBusinessData } from "./utils/types";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
-import { SerializedError } from "@reduxjs/toolkit";
 import { useMemo } from "react";
 import { mobile } from "./utils/Responsive";
+import { useMonthlyExpenseIncomeQuery } from "./utils/reduxtollkitquery";
 
 const columns = [
   {
@@ -56,12 +54,15 @@ const Container = styled.div`
 `;
 
 type Props = {
-  monthlyError: FetchBaseQueryError | SerializedError | undefined;
-  isMonthlyloading: boolean;
-  monthlyData?: getBusinessData[];
+  businessID: string | number;
 };
 
-const Monthly = ({ monthlyError, isMonthlyloading, monthlyData }: Props) => {
+const Monthly = ({ businessID }: Props) => {
+  const {
+    data: monthlyData,
+    isLoading: isMonthlyloading,
+    error: monthlyError,
+  } = useMonthlyExpenseIncomeQuery(businessID);
   const months = useMemo(
     () => [
       "jan",
@@ -103,6 +104,8 @@ const Monthly = ({ monthlyError, isMonthlyloading, monthlyData }: Props) => {
 
     return values;
   }, [monthlyData, months]);
+
+  // useEffect(() => {}, [Data]);
 
   if (isMonthlyloading) {
     return <>Loading...</>;

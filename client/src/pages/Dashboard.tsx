@@ -2,20 +2,15 @@ import Addbusiness from "../components/Addbusiness";
 import Select, { SingleValue } from "react-select";
 import BusinessInput from "../components/BusinessInput";
 import BusinessTable from "../components/BusinessTable";
-
 import Nav from "../components/Nav";
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
-import {
-  useDailyExpenseIncomeMutation,
-  useGetBusinessQuery,
-  useMonthlyExpenseIncomeMutation,
-  useWeeklyExpenseIncomeMutation,
-} from "../components/utils/reduxtollkitquery";
 import Monthly from "../components/Monthly";
 import Weekly from "../components/Weekly";
 import Linechart from "../components/Linechart";
 import { mobile } from "../components/utils/Responsive";
+import { useGetBusinessQuery } from "../components/utils/reduxtollkitquery";
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   outline: 1px solid yellow;
   width: 100%;
@@ -80,6 +75,13 @@ export type BusinessOptions = {
 };
 
 const Dashboard = () => {
+  const user = localStorage.getItem("user");
+  const navigate = useNavigate();
+  if (!user) {
+    navigate("/login");
+  }
+  const [businessID, setbusinessID] = useState<string | number>("");
+
   const [options, setoptions] = useState<BusinessOptions[]>([
     {
       value: "",
@@ -87,35 +89,10 @@ const Dashboard = () => {
     },
   ]);
 
-  // RTQ mutation fro geting data based on business_id
-
-  const [
-    dailyExpenseIncome,
-    {
-      data: incomeExpensedata,
-      isLoading: incomeExpenseLoading,
-      error: expenseincomeError,
-    },
-  ] = useDailyExpenseIncomeMutation();
-
-  // RTQ mutation fro geting monthly data based on business_id
-  const [
-    MonthlyExpenseIncome,
-    { data: monthlyData, isLoading: isMonthlyloading, error: monthlyError },
-  ] = useMonthlyExpenseIncomeMutation();
-
-  // RTQ mutation fro geting weekly data based on business_id
-  const [
-    weeklyExpenseIncome,
-    { data: weeklyData, isLoading: isweeklyloading, error: weeklyError },
-  ] = useWeeklyExpenseIncomeMutation();
-
   // select box
   const selectBusiness = (options: SingleValue<BusinessOptions>) => {
     if (options?.label && options?.value) {
-      dailyExpenseIncome(options?.value);
-      MonthlyExpenseIncome(options?.value);
-      weeklyExpenseIncome(options?.value);
+      setbusinessID(options?.value);
     }
   };
 
@@ -154,34 +131,18 @@ const Dashboard = () => {
             />
           </Item>
 
-          <BusinessTable
-            incomeExpensedata={incomeExpensedata}
-            incomeExpenseLoading={incomeExpenseLoading}
-            expenseincomeError={expenseincomeError}
-          />
+          <BusinessTable businessID={businessID} />
         </Values>
       </BodyContainer>
 
       <Analysis>
         <Charts>
           <h3>Visualization of total mothly loss and profits per year</h3>
-          <Linechart
-            monthlyData={monthlyData}
-            isMonthlyloading={isMonthlyloading}
-            monthlyError={monthlyError}
-          />
+          <Linechart businessID={businessID} />
         </Charts>
         <TableGroup>
-          <Monthly
-            monthlyData={monthlyData}
-            isMonthlyloading={isMonthlyloading}
-            monthlyError={monthlyError}
-          />
-          <Weekly
-            weeklyData={weeklyData}
-            isweeklyloading={isweeklyloading}
-            weeklyError={weeklyError}
-          />
+          <Monthly businessID={businessID} />
+          <Weekly businessID={businessID} />
         </TableGroup>
       </Analysis>
     </Container>

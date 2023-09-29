@@ -8,23 +8,24 @@ import {
   getallAmountByBusinessID,
   getallBusiness,
 } from "../controllers/user.js";
+import { VerifyTokens } from "../utils/verifyTokens.js";
 
 const router = express.Router();
 
-router.post("/add/amount", addIncomeandExpense);
+router.post("/add/amount", VerifyTokens, addIncomeandExpense);
 
-router.post("/add/business", addBusiness);
+router.post("/add/business", VerifyTokens, addBusiness);
 
-router.get("/get/business", getallBusiness);
+router.get("/get/business", VerifyTokens, getallBusiness);
 
-router.post("/get/amount/:id", getallAmountByBusinessID);
+router.get("/get/amount/:id", VerifyTokens, getallAmountByBusinessID);
 // get databased on currentDate
-router.get("/get/currentdateamount/:id", getAmountBasedOnDay);
-
-// get databased on currentDate
-router.post("/get/month/:id", getAmountBasedMonth);
+router.get("/get/currentdateamount/:id", VerifyTokens, getAmountBasedOnDay);
 
 // get databased on currentDate
-router.post("/get/week/:id", getAmountBasedWeek);
+router.get("/get/month/:id", VerifyTokens, getAmountBasedMonth);
+
+// get databased on currentDate
+router.get("/get/week/:id", VerifyTokens, getAmountBasedWeek);
 
 export default router;

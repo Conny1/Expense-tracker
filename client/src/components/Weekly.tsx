@@ -1,10 +1,8 @@
 import { styled } from "styled-components";
 import Table from "rc-table";
-import { getBusinessData } from "./utils/types";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
-import { SerializedError } from "@reduxjs/toolkit";
 import { useMemo } from "react";
 import { mobile } from "./utils/Responsive";
+import { useWeeklyExpenseIncomeQuery } from "./utils/reduxtollkitquery";
 
 const columns = [
   {
@@ -60,12 +58,15 @@ const Container = styled.div`
 `;
 
 type Props = {
-  weeklyError: FetchBaseQueryError | SerializedError | undefined;
-  isweeklyloading: boolean;
-  weeklyData?: getBusinessData[];
+  businessID: string | number;
 };
 
-const Weekly = ({ weeklyError, isweeklyloading, weeklyData }: Props) => {
+const Weekly = ({ businessID }: Props) => {
+  const {
+    data: weeklyData,
+    isLoading: isweeklyloading,
+    error: weeklyError,
+  } = useWeeklyExpenseIncomeQuery(businessID);
   const months = useMemo(
     () => [
       "jan",
