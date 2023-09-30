@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   /* outline: 1px solid red; */
@@ -21,13 +21,16 @@ const NavBar = styled.nav`
 const Btn = styled.button``;
 
 const Nav = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
   return (
     <Container>
       <NavBar>
         <Link to="/">Dashboard</Link>
-
-        <Link to="/profile">Profile</Link>
-        <Btn>Logout</Btn>
+        <Btn onClick={logout}>Logout</Btn>
       </NavBar>
     </Container>
   );

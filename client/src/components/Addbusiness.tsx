@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useAddBusinessMutation } from "./utils/reduxtollkitquery";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   /* outline: 1px solid red; */
   width: 400px;
@@ -22,7 +23,7 @@ const Input = styled.input`
 
 const Addbusiness = () => {
   const [name, setname] = useState("");
-
+  const navigate = useNavigate();
   // add business mutation
 
   const [AddBusiness, { isLoading, isSuccess, error }] =
@@ -39,6 +40,14 @@ const Addbusiness = () => {
   useEffect(() => {
     if (error) {
       toast("Error.Try again!!");
+      if ("status" in error) {
+        if (error.status === 401) {
+          toast("Your session has expired. Redirecting...");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        }
+      }
     }
     if (isLoading) {
       toast("submiting..");
@@ -46,7 +55,7 @@ const Addbusiness = () => {
     if (isSuccess) {
       toast("Data added sucessfuly");
     }
-  }, [isLoading, isSuccess, error]);
+  }, [isLoading, isSuccess, error, navigate]);
   return (
     <Container>
       <ToastContainer />

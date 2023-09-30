@@ -170,3 +170,61 @@ export const getAmountBasedWeek = (req, resp, next) => {
     }
   });
 };
+
+// delete icome expense
+
+export const deleteProfirLoss = (req, resp, next) => {
+  const business_id = Number(req.params.id);
+  const transaction_date = req.body.transaction_date;
+  //   console.log(newData);
+  const query =
+    "DELETE FROM  expensemanager.income_expense WHERE business_id=? AND transaction_date=?";
+
+  const values = [business_id, transaction_date];
+  connection.query(query, values, (err, results) => {
+    console.log(err);
+    if (err) {
+      return next(createError(500, "Delete server Error"));
+    } else {
+      console.log(results);
+      return resp.status(200).json({
+        success: true,
+        status: 200,
+        Message: "data deleted suceefuly",
+      });
+    }
+  });
+};
+
+// update income expense
+export const updaeticomeExpese = (req, resp, next) => {
+  const business_id = Number(req.params.id);
+  const transaction_date = req.body.transaction_date;
+  const income = req.body.income;
+  const expense = req.body.expense;
+  console.log(req.body);
+
+  const query =
+    "UPDATE  expensemanager.income_expense  SET income=?, expense=?, transaction_date=?  WHERE business_id=? AND transaction_date=?";
+
+  const values = [
+    income,
+    expense,
+    transaction_date,
+    business_id,
+    transaction_date,
+  ];
+  connection.query(query, values, (err, results) => {
+    // console.log(err);
+    if (err) {
+      return next(createError(500, "Edit server Error"));
+    } else {
+      // console.log(results);
+      return resp.status(200).json({
+        success: true,
+        status: 200,
+        Message: "data deleted suceefuly",
+      });
+    }
+  });
+};

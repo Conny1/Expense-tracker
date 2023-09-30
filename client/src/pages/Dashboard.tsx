@@ -11,8 +11,12 @@ import Linechart from "../components/Linechart";
 import { mobile } from "../components/utils/Responsive";
 import { useGetBusinessQuery } from "../components/utils/reduxtollkitquery";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// styles
 const Container = styled.div`
-  outline: 1px solid yellow;
+  /* outline: 1px solid yellow; */
   width: 100%;
   display: flex;
   align-items: center;
@@ -96,11 +100,22 @@ const Dashboard = () => {
     }
   };
 
-  const { data } = useGetBusinessQuery();
+  const { data, error } = useGetBusinessQuery();
 
   // map data into options and labels
   useEffect(() => {
     const makeOptions = () => {
+      if (error) {
+        toast("Error, Try again");
+        if ("status" in error) {
+          if (error.status === 401) {
+            toast("Your session has expired. Redirecting...");
+            setTimeout(() => {
+              navigate("/login");
+            }, 2000);
+          }
+        }
+      }
       const vals = data?.map((item) => {
         return { label: item.business_name, value: item.business_id };
       });
@@ -111,7 +126,7 @@ const Dashboard = () => {
     };
 
     makeOptions();
-  }, [data]);
+  }, [data, error, navigate]);
   return (
     <Container>
       <Nav />
@@ -145,6 +160,7 @@ const Dashboard = () => {
           <Weekly businessID={businessID} />
         </TableGroup>
       </Analysis>
+      <ToastContainer />
     </Container>
   );
 };

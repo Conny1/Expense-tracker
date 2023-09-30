@@ -25,3 +25,8 @@ export type User = {
   password?: string;
   token?: string;
 };
+
+export type DeleteUpdate = {
+  transaction_date?: Date | string;
+  business_id?: string | number;
+};

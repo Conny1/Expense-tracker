@@ -6,8 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div`
-  outline: 1px solid gainsboro;
-  padding: 5px;
   width: 100%;
   min-height: 100vh;
   margin-top: 10px;

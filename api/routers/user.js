@@ -2,11 +2,13 @@ import express from "express";
 import {
   addBusiness,
   addIncomeandExpense,
+  deleteProfirLoss,
   getAmountBasedMonth,
   getAmountBasedOnDay,
   getAmountBasedWeek,
   getallAmountByBusinessID,
   getallBusiness,
+  updaeticomeExpese,
 } from "../controllers/user.js";
 import { VerifyTokens } from "../utils/verifyTokens.js";
 
@@ -27,5 +29,11 @@ router.get("/get/month/:id", VerifyTokens, getAmountBasedMonth);
 
 // get databased on currentDate
 router.get("/get/week/:id", VerifyTokens, getAmountBasedWeek);
+
+// delete profit || loss
+router.delete("/deleteProfitloss/:id", VerifyTokens, deleteProfirLoss);
+
+// edit income expense
+router.put("/editIncomeExpense/:id", VerifyTokens, updaeticomeExpese);
 
 export default router;
