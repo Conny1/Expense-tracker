@@ -8,7 +8,7 @@ export const addBusiness = (req, resp, next) => {
 
   //   console.log(newData);
   // Insert data into the business_names table
-  const query = "INSERT INTO expensemanager.business_names SET ?";
+  const query = "INSERT INTO analysis_expensemanager.business_names SET ?";
 
   connection.query(query, newData, (error, results) => {
     // console.log(error);
@@ -31,7 +31,7 @@ export const addBusiness = (req, resp, next) => {
 };
 
 export const getallBusiness = (req, resp, next) => {
-  const query = "SELECT * FROM expensemanager.business_names";
+  const query = "SELECT * FROM analysis_expensemanager.business_names";
 
   connection.query(query, (err, results) => {
     if (err) {
@@ -56,10 +56,11 @@ export const addIncomeandExpense = (req, resp, next) => {
     income: req.body.income,
     expense: req.body.expense,
     transaction_date: req.body.transaction_date,
+    description: req.body.description,
   };
 
   // Insert data into the income_expense table
-  const query = "INSERT INTO expensemanager.income_expense SET ?";
+  const query = "INSERT INTO  analysis_expensemanager.income_expense SET ?";
 
   connection.query(query, newData, (error, results) => {
     if (error) {
@@ -80,7 +81,7 @@ export const addIncomeandExpense = (req, resp, next) => {
 export const getallAmountByBusinessID = (req, resp, next) => {
   const business_id = Number(req.params.id);
   const query =
-    "SELECT * FROM expensemanager.income_expense WHERE business_id=? ORDER BY transaction_date DESC ";
+    "SELECT * FROM analysis_expensemanager.income_expense WHERE business_id=? ORDER BY transaction_date DESC ";
 
   connection.query(query, [business_id], (err, results) => {
     if (err) {
@@ -105,7 +106,7 @@ export const getAmountBasedOnDay = (req, resp, next) => {
 
   //   console.log(newData);
   const query =
-    "SELECT    YEAR(transaction_date) AS year,    MONTH(transaction_date) AS month,    DAY(transaction_date) AS day,    SUM(income) AS total_income,    SUM(expense) AS total_expense FROM    expensemanager.income_expense WHERE    YEAR(transaction_date) = YEAR(CURDATE()) AND business_id=? GROUP BY    YEAR(transaction_date), MONTH(transaction_date), DAY(transaction_date) ORDER BY     YEAR(transaction_date), MONTH(transaction_date), DAY(transaction_date)";
+    "SELECT    YEAR(transaction_date) AS year,    MONTH(transaction_date) AS month,    DAY(transaction_date) AS day,    SUM(income) AS total_income,    SUM(expense) AS total_expense FROM    analysis_expensemanager.income_expense WHERE    YEAR(transaction_date) = YEAR(CURDATE()) AND business_id=? GROUP BY    YEAR(transaction_date), MONTH(transaction_date), DAY(transaction_date) ORDER BY     YEAR(transaction_date), MONTH(transaction_date), DAY(transaction_date)";
 
   connection.query(query, [business_id], (err, results) => {
     if (err) {
@@ -129,7 +130,7 @@ export const getAmountBasedOnDay = (req, resp, next) => {
 export const getAmountBasedMonth = (req, resp, next) => {
   const business_id = Number(req.params.id);
   const query =
-    "SELECT YEAR(transaction_date) AS year, MONTH(transaction_date) AS month, SUM(income) AS total_income, SUM(expense) AS total_expense  FROM  expensemanager.income_expense  WHERE   YEAR(transaction_date) = YEAR(CURDATE()) AND business_id=?  GROUP BY  YEAR(transaction_date), MONTH(transaction_date) ORDER BY  YEAR(transaction_date), MONTH(transaction_date)";
+    "SELECT YEAR(transaction_date) AS year, MONTH(transaction_date) AS month, SUM(income) AS total_income, SUM(expense) AS total_expense  FROM  analysis_expensemanager.income_expense  WHERE   YEAR(transaction_date) = YEAR(CURDATE()) AND business_id=?  GROUP BY  YEAR(transaction_date), MONTH(transaction_date) ORDER BY  YEAR(transaction_date), MONTH(transaction_date)";
 
   connection.query(query, [business_id], (err, results) => {
     if (err) {
@@ -152,7 +153,7 @@ export const getAmountBasedMonth = (req, resp, next) => {
 export const getAmountBasedWeek = (req, resp, next) => {
   const business_id = Number(req.params.id);
   const query =
-    "SELECT    business_id,    YEAR(transaction_date) AS year,    MONTH(transaction_date) AS month,    FLOOR((DAY(transaction_date) - 1) / 7) + 1 AS week_in_month,    SUM(income) AS total_income,    SUM(expense) AS total_expense FROM     expensemanager.income_expense WHERE     YEAR(transaction_date) = YEAR(CURDATE())     AND business_id =? GROUP BY     business_id, year, month, week_in_month";
+    "SELECT    business_id,    YEAR(transaction_date) AS year,    MONTH(transaction_date) AS month,    FLOOR((DAY(transaction_date) - 1) / 7) + 1 AS week_in_month,    SUM(income) AS total_income,    SUM(expense) AS total_expense FROM    analysis_expensemanager.income_expense WHERE     YEAR(transaction_date) = YEAR(CURDATE())     AND business_id =? GROUP BY     business_id, year, month, week_in_month";
 
   connection.query(query, [business_id], (err, results) => {
     if (err) {
@@ -178,7 +179,7 @@ export const deleteProfirLoss = (req, resp, next) => {
   const transaction_date = req.body.transaction_date;
   //   console.log(newData);
   const query =
-    "DELETE FROM  expensemanager.income_expense WHERE business_id=? AND transaction_date=?";
+    "DELETE FROM  analysis_expensemanager.income_expense WHERE business_id=? AND transaction_date=?";
 
   const values = [business_id, transaction_date];
   connection.query(query, values, (err, results) => {
@@ -202,21 +203,17 @@ export const updaeticomeExpese = (req, resp, next) => {
   const transaction_date = req.body.transaction_date;
   const income = req.body.income;
   const expense = req.body.expense;
-  console.log(req.body);
+  const description = req.body.description;
+  // console.log(req.body);
 
   const query =
-    "UPDATE  expensemanager.income_expense  SET income=?, expense=?, transaction_date=?  WHERE business_id=? AND transaction_date=?";
+    "UPDATE  analysis_expensemanager.income_expense  SET income=?, expense=?, description=?  WHERE business_id=? AND transaction_date=?";
 
-  const values = [
-    income,
-    expense,
-    transaction_date,
-    business_id,
-    transaction_date,
-  ];
+  const values = [income, expense, description, business_id, transaction_date];
   connection.query(query, values, (err, results) => {
     // console.log(err);
     if (err) {
+      // console.log(err);
       return next(createError(500, "Edit server Error"));
     } else {
       // console.log(results);

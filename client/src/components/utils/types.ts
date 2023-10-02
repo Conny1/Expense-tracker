@@ -8,6 +8,7 @@ export type BusinessAmount = {
   income: number;
   expense: number;
   transaction_date: Date | string;
+  description?: string;
 };
 
 export type getBusinessData = {

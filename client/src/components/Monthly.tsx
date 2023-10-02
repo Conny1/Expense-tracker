@@ -1,8 +1,9 @@
 import { styled } from "styled-components";
 import Table from "rc-table";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { mobile } from "./utils/Responsive";
 import { useMonthlyExpenseIncomeQuery } from "./utils/reduxtollkitquery";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   {
@@ -48,7 +49,7 @@ const columns = [
 const Container = styled.div`
   max-height: 70vh;
   overflow: scroll;
-  ${mobile({ width: "100%" })};
+  ${mobile({ width: "100%", marginTop: "100px" })};
   display: flex;
   flex-direction: column;
 `;
@@ -58,6 +59,7 @@ type Props = {
 };
 
 const Monthly = ({ businessID }: Props) => {
+  const navigate = useNavigate();
   const {
     data: monthlyData,
     isLoading: isMonthlyloading,
@@ -105,7 +107,15 @@ const Monthly = ({ businessID }: Props) => {
     return values;
   }, [monthlyData, months]);
 
-  // useEffect(() => {}, [Data]);
+  useEffect(() => {
+    if (monthlyError) {
+      if ("status" in monthlyError) {
+        if (monthlyError.status === 400 || monthlyError.status === 401) {
+          navigate("/login");
+        }
+      }
+    }
+  }, [monthlyError, navigate]);
 
   if (isMonthlyloading) {
     return <>Loading...</>;

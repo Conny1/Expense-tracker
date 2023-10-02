@@ -22,7 +22,9 @@ const Tablehead = styled.th`
 const Tabledata = styled.td`
   border: 1px solid gainsboro;
 `;
-const Btn = styled.button``;
+const Btn = styled.button`
+  flex: 1;
+`;
 
 type Props = {
   businessID: string | number;
@@ -97,6 +99,7 @@ const BusinessTable = ({ businessID }: Props) => {
           <Tablehead>Expense</Tablehead>
           <Tablehead>Profit</Tablehead>
           <Tablehead>Loss</Tablehead>
+          <Tablehead>Description</Tablehead>
           <Tablehead>Actions</Tablehead>
         </TableRow>
       </thead>
@@ -119,11 +122,13 @@ const BusinessTable = ({ businessID }: Props) => {
               <Tabledata>
                 {item.expense > item.income ? item.expense - item.income : "0"}
               </Tabledata>
+              <Tabledata>{item.description}</Tabledata>
               <Tabledata
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   flexWrap: "wrap",
+                  gap: "5px",
                 }}
               >
                 <Btn
@@ -134,11 +139,12 @@ const BusinessTable = ({ businessID }: Props) => {
                         business_id: item.business_id,
                         income: item.income,
                         expense: item.expense,
+                        description: item.description,
                       },
                     })
                   }
                 >
-                  update
+                  Edit
                 </Btn>
 
                 <Btn

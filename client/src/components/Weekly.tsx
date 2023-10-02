@@ -1,8 +1,9 @@
 import { styled } from "styled-components";
 import Table from "rc-table";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { mobile } from "./utils/Responsive";
 import { useWeeklyExpenseIncomeQuery } from "./utils/reduxtollkitquery";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   {
@@ -54,7 +55,7 @@ const columns = [
 const Container = styled.div`
   max-height: 70vh;
   overflow: scroll;
-  ${mobile({ width: "100%" })};
+  ${mobile({ width: "100%", marginTop: "100px" })};
 `;
 
 type Props = {
@@ -62,6 +63,7 @@ type Props = {
 };
 
 const Weekly = ({ businessID }: Props) => {
+  const navigate = useNavigate();
   const {
     data: weeklyData,
     isLoading: isweeklyloading,
@@ -109,6 +111,16 @@ const Weekly = ({ businessID }: Props) => {
 
     return values;
   }, [weeklyData, months]);
+
+  useEffect(() => {
+    if (weeklyError) {
+      if ("status" in weeklyError) {
+        if (weeklyError.status === 400 || weeklyError.status === 401) {
+          navigate("/login");
+        }
+      }
+    }
+  }, [weeklyError, navigate]);
 
   if (isweeklyloading) {
     return <>Loading...</>;

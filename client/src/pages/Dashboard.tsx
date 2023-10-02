@@ -59,7 +59,7 @@ const Analysis = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  ${mobile({ flexDirection: "column" })};
+  ${mobile({ flexDirection: "column", gap: "30px" })};
 `;
 
 const Charts = styled.div`
@@ -79,11 +79,6 @@ export type BusinessOptions = {
 };
 
 const Dashboard = () => {
-  const user = localStorage.getItem("user");
-  const navigate = useNavigate();
-  if (!user) {
-    navigate("/login");
-  }
   const [businessID, setbusinessID] = useState<string | number>("");
 
   const [options, setoptions] = useState<BusinessOptions[]>([
@@ -92,6 +87,7 @@ const Dashboard = () => {
       label: "",
     },
   ]);
+  const navigate = useNavigate();
 
   // select box
   const selectBusiness = (options: SingleValue<BusinessOptions>) => {
@@ -100,13 +96,25 @@ const Dashboard = () => {
     }
   };
 
-  const { data, error } = useGetBusinessQuery();
+  const { data, error, isSuccess } = useGetBusinessQuery();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   // map data into options and labels
   useEffect(() => {
     const makeOptions = () => {
       if (error) {
-        toast("Error, Try again");
+        if ("status" in error)
+          if (error.status === 500) {
+            toast("Error, Try again");
+          }
+
         if ("status" in error) {
           if (error.status === 401) {
             toast("Your session has expired. Redirecting...");
@@ -116,17 +124,18 @@ const Dashboard = () => {
           }
         }
       }
-      const vals = data?.map((item) => {
-        return { label: item.business_name, value: item.business_id };
-      });
-
-      if (vals) {
-        setoptions(vals);
+      if (isSuccess && data.length > 0) {
+        const vals = data?.map((item) => {
+          return { label: item.business_name, value: item.business_id };
+        });
+        if (vals) {
+          setoptions(vals);
+        }
       }
     };
 
     makeOptions();
-  }, [data, error, navigate]);
+  }, [data, error, navigate, isSuccess]);
   return (
     <Container>
       <Nav />
@@ -152,7 +161,10 @@ const Dashboard = () => {
 
       <Analysis>
         <Charts>
-          <h3>Visualization of total mothly loss and profits per year</h3>
+          <h3>
+            Visualization of total monthly loss and profits based on current
+            year
+          </h3>
           <Linechart businessID={businessID} />
         </Charts>
         <TableGroup>

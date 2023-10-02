@@ -61,6 +61,7 @@ const Update = () => {
   // console.log(date2);
   const [income, setincome] = useState(stateData.income);
   const [expense, setexpense] = useState(stateData.expense);
+  const [desc, setdesc] = useState(stateData?.description || "");
   // const [date, setdate] = useState(date2);
 
   const [
@@ -109,6 +110,7 @@ const Update = () => {
       income: Number(income),
       expense: Number(expense),
       transaction_date: date2,
+      description: desc,
     };
     // console.log(body);
     await editIncomeExpense(body);
@@ -143,6 +145,17 @@ const Update = () => {
             type="number"
             placeholder="Expense"
             required
+          />
+        </Item>
+
+        <Item>
+          <Input
+            onChange={(e) => {
+              setdesc(e.target.value);
+            }}
+            value={desc}
+            type="text"
+            placeholder="description"
           />
         </Item>
 

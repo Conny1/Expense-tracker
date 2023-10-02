@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://analysisease.com/",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
@@ -12,7 +13,6 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.5",
     "rc-table": "^7.34.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.3",
+    "@types/nodemailer": "^6.4.11",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

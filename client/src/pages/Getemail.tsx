@@ -5,7 +5,6 @@ import { useVerifyemailMutation } from "../components/utils/reduxtollkitquery";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-// import nodemailer from 'nodemailer';
 
 const Container = styled.div`
   outline: 1px solid gainsboro;
@@ -59,8 +58,9 @@ const Getemail = () => {
     if (isLoading) toast("loading...");
     if (isSuccess) {
       toast("password reset link has been sent to your email");
+
       setTimeout(() => {
-        navigate("/passwordreset");
+        // navigate("/passwordreset");
       }, 3000);
     }
     if (error) {

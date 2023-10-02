@@ -49,6 +49,7 @@ type Props = {
 const BusinessInput = ({ options }: Props) => {
   const [income, setincome] = useState("");
   const [expense, setexpense] = useState("");
+  const [desc, setdesc] = useState("");
   const [date, setdate] = useState("");
   const [business, setbusiness] = useState<BusinessOptions>({
     value: "",
@@ -103,6 +104,7 @@ const BusinessInput = ({ options }: Props) => {
       income: Number(income),
       expense: Number(expense),
       transaction_date: date,
+      description: desc,
     };
     await AddBusinessExpense(body);
   };
@@ -151,6 +153,15 @@ const BusinessInput = ({ options }: Props) => {
             type="date"
             placeholder="Input Date"
             required
+          />
+        </Item>
+        <Item>
+          <Input
+            onChange={(e) => {
+              setdesc(e.target.value);
+            }}
+            type="text"
+            placeholder="Description"
           />
         </Item>
 
