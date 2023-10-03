@@ -54,6 +54,15 @@ export const api = createApi({
       invalidatesTags: ["Businessnames"],
     }),
 
+    deleteBusinessNames: builder.mutation<void, DeleteUpdate>({
+      query: (body) => ({
+        url: `/user/deletebusinessnames/${body.business_id}`,
+        method: "DELETE",
+        body,
+      }),
+      invalidatesTags: ["Businessnames", "Incomeexpense"],
+    }),
+
     dailyExpenseIncome: builder.query<BusinessAmount[], string | number>({
       query: (id) => `/user/get/amount/${id}`,
       providesTags: ["Incomeexpense"],
@@ -127,4 +136,5 @@ export const {
   useVerifyemailMutation,
   useDeleteProfitlossMutation,
   useEditIncomeExpenseMutation,
+  useDeleteBusinessNamesMutation,
 } = api;

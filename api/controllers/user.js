@@ -64,6 +64,7 @@ export const addIncomeandExpense = (req, resp, next) => {
 
   connection.query(query, newData, (error, results) => {
     if (error) {
+      // console.log(error);
       return next(createError(500, error.message));
     } else {
       console.log("Data inserted successfully.");
@@ -217,6 +218,27 @@ export const updaeticomeExpese = (req, resp, next) => {
       return next(createError(500, "Edit server Error"));
     } else {
       // console.log(results);
+      return resp.status(200).json({
+        success: true,
+        status: 200,
+        Message: "data deleted suceefuly",
+      });
+    }
+  });
+};
+
+export const deleteBisinessName = (req, resp, next) => {
+  const business_id = Number(req.params.id);
+  //   console.log(newData);
+  const query =
+    "DELETE FROM  analysis_expensemanager.business_names WHERE business_id=?";
+
+  const values = [business_id];
+  connection.query(query, values, (err, results) => {
+    // console.log(err);
+    if (err) {
+      return next(createError(500, "Delete server Error"));
+    } else {
       return resp.status(200).json({
         success: true,
         status: 200,

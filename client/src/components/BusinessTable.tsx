@@ -51,7 +51,7 @@ const BusinessTable = ({ businessID }: Props) => {
     if (error) {
       toast("Error, Try again");
       if ("status" in error) {
-        if (error.status === 401) {
+        if (error.status === 401 || error.status === 400) {
           toast("Your session has expired. Redirecting...");
           setTimeout(() => {
             navigate("/login");

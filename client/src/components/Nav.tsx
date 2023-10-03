@@ -24,7 +24,7 @@ const Nav = () => {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
-    navigate("/");
+    return navigate("/login");
   };
   return (
     <Container>

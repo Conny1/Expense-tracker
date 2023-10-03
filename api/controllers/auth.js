@@ -10,6 +10,7 @@ export const logIntoAccount = (req, resp, next) => {
 
   connection.query(query, [email], (err, result) => {
     if (err) return next(createError(500, "login server error"));
+    console.log(result);
     if (result?.length === 0)
       return next(createError(404, "account with that email does not exist "));
 
@@ -25,7 +26,7 @@ export const logIntoAccount = (req, resp, next) => {
         data: result[0].email,
       },
       process.env.SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "4h" }
     );
 
     resp.status(200).json({ email: result[0].email, token });

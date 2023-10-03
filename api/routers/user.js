@@ -2,6 +2,7 @@ import express from "express";
 import {
   addBusiness,
   addIncomeandExpense,
+  deleteBisinessName,
   deleteProfirLoss,
   getAmountBasedMonth,
   getAmountBasedOnDay,
@@ -35,5 +36,7 @@ router.delete("/deleteProfitloss/:id", VerifyTokens, deleteProfirLoss);
 
 // edit income expense
 router.put("/editIncomeExpense/:id", VerifyTokens, updaeticomeExpese);
+// delete businessNames
+router.delete("/deletebusinessnames/:id", VerifyTokens, deleteBisinessName);
 
 export default router;
