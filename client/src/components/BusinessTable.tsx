@@ -7,6 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import { compareAsc, format } from "date-fns";
 
 const Container = styled.table`
   width: 100%;
@@ -80,6 +81,7 @@ const BusinessTable = ({ businessID }: Props) => {
     const date = new Date(transaction_date).toLocaleDateString().split("/");
 
     const date2 = `${date[2]}-${date[0]}-${date[1]}`;
+
     if (business_id && date2) {
       const body = {
         business_id,
@@ -94,7 +96,7 @@ const BusinessTable = ({ businessID }: Props) => {
       <ToastContainer />
       <thead>
         <TableRow>
-          <Tablehead>Date</Tablehead>
+          <Tablehead>Date (mm/dd/yyy ) </Tablehead>
           <Tablehead>income</Tablehead>
           <Tablehead>Expense</Tablehead>
           <Tablehead>Profit</Tablehead>
@@ -113,7 +115,7 @@ const BusinessTable = ({ businessID }: Props) => {
           const formattedDate = new Date(item.transaction_date);
           return (
             <TableRow key={i}>
-              <Tabledata>{formattedDate.toDateString()}</Tabledata>
+              <Tabledata>{formattedDate.toLocaleDateString()}</Tabledata>
               <Tabledata>{item.income}</Tabledata>
               <Tabledata>{item.expense}</Tabledata>
               <Tabledata>

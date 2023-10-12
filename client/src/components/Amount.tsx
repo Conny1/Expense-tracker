@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mobile } from "./utils/Responsive";
 
 const Container = styled.div`
   min-width: 150px;
@@ -10,6 +11,7 @@ const Container = styled.div`
   height: 70px;
   align-items: center;
   gap: 15px;
+  ${mobile({ width: "90%" })};
 `;
 const Text = styled.p`
   color: #fff;
@@ -17,11 +19,16 @@ const Text = styled.p`
   /* margin-top: 1px; */
 `;
 
-const Amount = () => {
+type Props = {
+  text: string;
+  total: number;
+};
+
+const Amount = ({ text, total }: Props) => {
   return (
     <Container>
-      <Text>Today</Text>
-      <Text>Ksh 1000</Text>
+      <Text>{text}</Text>
+      <Text>{total}</Text>
     </Container>
   );
 };

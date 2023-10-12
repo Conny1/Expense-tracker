@@ -1,13 +1,11 @@
 import Addbusiness from "../components/Addbusiness";
-import Select, { SingleValue } from "react-select";
+import Select, { ActionMeta, SingleValue, StylesConfig } from "react-select";
 import BusinessInput from "../components/BusinessInput";
 import BusinessTable from "../components/BusinessTable";
 import Nav from "../components/Nav";
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
 import Monthly from "../components/Monthly";
-import Weekly from "../components/Weekly";
-import Linechart from "../components/Linechart";
 import { mobile } from "../components/utils/Responsive";
 import { useGetBusinessQuery } from "../components/utils/reduxtollkitquery";
 import { useNavigate } from "react-router-dom";
@@ -53,24 +51,13 @@ const Item = styled.div`
 `;
 
 const Analysis = styled.div`
-  margin-top: 30px;
+  margin-top: 10px;
   display: flex;
   width: 90%;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  ${mobile({ flexDirection: "column", gap: "30px" })};
-`;
-
-const Charts = styled.div`
-  margin-top: 30px;
-  flex: 1;
-  height: 400px;
-  ${mobile({ width: "100%", flex: "none" })};
-`;
-
-const TableGroup = styled.div`
-  flex: 1;
+  ${mobile({ flexDirection: "column", width: "90%" })};
 `;
 
 export type BusinessOptions = {
@@ -90,9 +77,16 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   // select box
-  const selectBusiness = (options: SingleValue<BusinessOptions>) => {
-    if (options?.label && options?.value) {
-      setbusinessID(options?.value);
+  const selectBusiness = (
+    options: SingleValue<BusinessOptions> | ActionMeta<unknown> | unknown
+  ) => {
+    const selectedOption = options as SingleValue<BusinessOptions>;
+    if (selectedOption) {
+      if ("value" in selectedOption && "label" in selectedOption) {
+        if (selectedOption?.label && selectedOption?.value) {
+          setbusinessID(selectedOption?.value);
+        }
+      }
     }
   };
 
@@ -136,6 +130,14 @@ const Dashboard = () => {
 
     makeOptions();
   }, [data, error, navigate, isSuccess]);
+
+  // react select custome styles
+  const customStyles: StylesConfig = {
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? "white" : "blue", // Set text color to blue
+    }),
+  };
   return (
     <Container>
       <Nav />
@@ -150,6 +152,7 @@ const Dashboard = () => {
               className="basic-single"
               classNamePrefix="select"
               name="business"
+              styles={customStyles}
               options={options}
               onChange={selectBusiness}
             />
@@ -160,17 +163,7 @@ const Dashboard = () => {
       </BodyContainer>
 
       <Analysis>
-        <Charts>
-          <h3>
-            Visualization of total monthly loss and profits based on current
-            year
-          </h3>
-          <Linechart businessID={businessID} />
-        </Charts>
-        <TableGroup>
-          <Monthly businessID={businessID} />
-          <Weekly businessID={businessID} />
-        </TableGroup>
+        <Monthly businessID={businessID} />
       </Analysis>
       <ToastContainer />
     </Container>

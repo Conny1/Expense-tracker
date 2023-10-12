@@ -184,11 +184,11 @@ export const deleteProfirLoss = (req, resp, next) => {
 
   const values = [business_id, transaction_date];
   connection.query(query, values, (err, results) => {
-    console.log(err);
+    // console.log(err);
     if (err) {
       return next(createError(500, "Delete server Error"));
     } else {
-      console.log(results);
+      // console.log(results);
       return resp.status(200).json({
         success: true,
         status: 200,
@@ -201,6 +201,7 @@ export const deleteProfirLoss = (req, resp, next) => {
 // update income expense
 export const updaeticomeExpese = (req, resp, next) => {
   const business_id = Number(req.params.id);
+  const dateurl = req.params.date;
   const transaction_date = req.body.transaction_date;
   const income = req.body.income;
   const expense = req.body.expense;
@@ -208,9 +209,16 @@ export const updaeticomeExpese = (req, resp, next) => {
   // console.log(req.body);
 
   const query =
-    "UPDATE  analysis_expensemanager.income_expense  SET income=?, expense=?, description=?  WHERE business_id=? AND transaction_date=?";
+    "UPDATE  analysis_expensemanager.income_expense  SET income=?, expense=?, description=?, transaction_date=? WHERE business_id=? AND transaction_date=?";
 
-  const values = [income, expense, description, business_id, transaction_date];
+  const values = [
+    income,
+    expense,
+    description,
+    transaction_date,
+    business_id,
+    dateurl,
+  ];
   connection.query(query, values, (err, results) => {
     // console.log(err);
     if (err) {
@@ -221,7 +229,7 @@ export const updaeticomeExpese = (req, resp, next) => {
       return resp.status(200).json({
         success: true,
         status: 200,
-        Message: "data deleted suceefuly",
+        Message: "data edited suceefuly",
       });
     }
   });

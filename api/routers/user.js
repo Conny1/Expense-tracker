@@ -26,7 +26,11 @@ router.get("/get/amount/:id", VerifyTokens, getallAmountByBusinessID);
 router.get("/get/currentdateamount/:id", VerifyTokens, getAmountBasedOnDay);
 
 // get databased on currentDate
-router.get("/get/month/:id", VerifyTokens, getAmountBasedMonth);
+router.post(
+  "/get/month/:id/:strdate/:enddate",
+  VerifyTokens,
+  getAmountBasedMonth
+);
 
 // get databased on currentDate
 router.get("/get/week/:id", VerifyTokens, getAmountBasedWeek);
@@ -35,7 +39,7 @@ router.get("/get/week/:id", VerifyTokens, getAmountBasedWeek);
 router.delete("/deleteProfitloss/:id", VerifyTokens, deleteProfirLoss);
 
 // edit income expense
-router.put("/editIncomeExpense/:id", VerifyTokens, updaeticomeExpese);
+router.put("/editIncomeExpense/:id/:date", VerifyTokens, updaeticomeExpese);
 // delete businessNames
 router.delete("/deletebusinessnames/:id", VerifyTokens, deleteBisinessName);
 

@@ -1,12 +1,6 @@
 // Need to use the React-specific entry point to allow generating React hooks
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {
-  Business,
-  BusinessAmount,
-  DeleteUpdate,
-  User,
-  getBusinessData,
-} from "./types";
+import { Business, BusinessAmount, DeleteUpdate, User } from "./types";
 
 // Define a service using a base URL and expected endpoints
 export const api = createApi({
@@ -68,16 +62,6 @@ export const api = createApi({
       providesTags: ["Incomeexpense"],
     }),
 
-    weeklyExpenseIncome: builder.query<getBusinessData[], string | number>({
-      query: (id) => `/user/get/week/${id}`,
-      providesTags: ["Incomeexpense"],
-    }),
-
-    MonthlyExpenseIncome: builder.query<getBusinessData[], string | number>({
-      query: (id) => `/user/get/month/${id}`,
-      providesTags: ["Incomeexpense"],
-    }),
-
     loginAccount: builder.mutation<User, User>({
       query: (body) => ({
         url: `/auth/login/`,
@@ -113,7 +97,7 @@ export const api = createApi({
 
     editIncomeExpense: builder.mutation<void, BusinessAmount>({
       query: (body) => ({
-        url: `/user/editIncomeExpense/${body.business_id}`,
+        url: `/user/editIncomeExpense/${body.business_id}/${body.dateurl}`,
         method: "PUT",
         body,
       }),
@@ -129,8 +113,6 @@ export const {
   useAddBusinessExpenseMutation,
   useAddBusinessMutation,
   useDailyExpenseIncomeQuery,
-  useWeeklyExpenseIncomeQuery,
-  useMonthlyExpenseIncomeQuery,
   useLoginAccountMutation,
   useChangePasswordMutation,
   useVerifyemailMutation,

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLoginAccountMutation } from "../components/utils/reduxtollkitquery";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { mobile } from "../components/utils/Responsive";
 
 const Container = styled.div`
   width: 100%;
@@ -22,6 +23,8 @@ const Form = styled.form`
   flex-direction: column;
   height: 300px;
   justify-content: space-evenly;
+
+  ${mobile({ width: "80%", outline: "1px solid gainsboro" })};
 `;
 const Item = styled.div`
   width: 100%;

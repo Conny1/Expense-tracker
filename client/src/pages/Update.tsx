@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { format } from "date-fns";
 
 import { mobile } from "../components/utils/Responsive";
 import { useEditIncomeExpenseMutation } from "../components/utils/reduxtollkitquery";
@@ -49,6 +50,7 @@ const Update = () => {
   }
   const location = useLocation();
   const stateData = location.state;
+  // console.log(stateData);
 
   // const dateTime = new Date(stateData.transaction_date)
   //   .toLocaleDateString()
@@ -62,7 +64,9 @@ const Update = () => {
   const [income, setincome] = useState(stateData.income);
   const [expense, setexpense] = useState(stateData.expense);
   const [desc, setdesc] = useState(stateData?.description || "");
-  // const [date, setdate] = useState(date2);
+  const [date, setdate] = useState(
+    format(new Date(stateData.transaction_date), "yyy-MM-dd")
+  );
 
   const [
     editIncomeExpense,
@@ -79,7 +83,9 @@ const Update = () => {
     }
     if (expenseSubmited) {
       toast("Data Edited sucessfuly");
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     }
     if (expenseError) {
       toast("Error, Try again");
@@ -97,19 +103,16 @@ const Update = () => {
   const updateDb = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!income || !expense) {
+    if (!income || !expense || !date) {
       return toast("Input all requred infromation");
     }
-    const date = new Date(stateData.transaction_date)
-      .toLocaleDateString()
-      .split("/");
 
-    const date2 = `${date[2]}-${date[0]}-${date[1]}`;
     const body = {
       business_id: stateData.business_id,
       income: Number(income),
       expense: Number(expense),
-      transaction_date: date2,
+      transaction_date: date,
+      dateurl: format(new Date(stateData.transaction_date), "yyy-MM-dd"),
       description: desc,
     };
     // console.log(body);
@@ -156,6 +159,18 @@ const Update = () => {
             value={desc}
             type="text"
             placeholder="description"
+          />
+        </Item>
+
+        <Item>
+          <h4>format: yyy-MM-dd</h4>
+          <Input
+            onChange={(e) => {
+              setdate(e.target.value);
+            }}
+            value={date}
+            type="date"
+            placeholder="Date"
           />
         </Item>
 

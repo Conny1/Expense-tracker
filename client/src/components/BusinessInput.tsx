@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Select, { SingleValue } from "react-select";
+import Select, { ActionMeta, SingleValue, StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
 import { useAddBusinessExpenseMutation } from "./utils/reduxtollkitquery";
 import { ToastContainer, toast } from "react-toastify";
@@ -87,9 +87,16 @@ const BusinessInput = ({ options }: Props) => {
     }
   }, [expenseLoading, expenseSubmited, expenseError, navigate]);
 
-  const selectBusiness = (options: SingleValue<BusinessOptions>) => {
-    if (options?.label && options?.value) {
-      setbusiness(options);
+  const selectBusiness = (
+    options: SingleValue<BusinessOptions> | ActionMeta<unknown> | unknown
+  ) => {
+    const selectedOption = options as SingleValue<BusinessOptions>;
+    if (selectedOption) {
+      if ("value" in selectedOption && "label" in selectedOption) {
+        if (selectedOption?.label && selectedOption?.value) {
+          setbusiness(selectedOption);
+        }
+      }
     }
   };
 
@@ -109,6 +116,14 @@ const BusinessInput = ({ options }: Props) => {
     await AddBusinessExpense(body);
   };
 
+  // react select custome styles
+  const customStyles: StylesConfig = {
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? "white" : "blue", // Set text color to blue
+    }),
+  };
+
   return (
     <Container>
       <ToastContainer />
@@ -119,6 +134,7 @@ const BusinessInput = ({ options }: Props) => {
             className="basic-single"
             classNamePrefix="select"
             name="business"
+            styles={customStyles}
             options={options}
             onChange={selectBusiness}
           />
